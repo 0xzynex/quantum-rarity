@@ -49,7 +49,8 @@ A wallet's score is the rarity of its rarest pattern. We scored 2,000,000 random
 
 ## Safety
 
-- **Address only.** No wallet connect, no signatures, no network calls with your data. Everything runs in the page.
+- **Address only.** No wallet connect, no signatures. All the math runs in the page.
+- **Simple stats.** The server counts page views and which public addresses get checked (a random id per browser, no IPs, no keys). The owner sees them at `/stats?key=…`; `deploy.sh` prints the link.
 - If someone pastes a **private key, keypair file or seed phrase**, the page refuses it, clears the box and warns them.
 - A strict Content Security Policy: scripts only from the site itself.
 
@@ -70,6 +71,7 @@ npm test           # 7 tests: math vs brute force, vs random keys, vs real ed255
    cd quantum-rarity
    sudo bash deploy/deploy.sh yourdomain.xyz
    ```
+   Behind Cloudflare with the orange cloud: `sudo bash deploy/deploy.sh yourdomain.xyz cloudflare` and SSL mode **Full**.
 4. Open `https://yourdomain.xyz`. Caddy gets the HTTPS certificate on its own.
 
 To update later: `git pull && sudo bash deploy/deploy.sh yourdomain.xyz`.

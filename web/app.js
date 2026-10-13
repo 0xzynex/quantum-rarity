@@ -30,6 +30,21 @@ function fmtBeats(share) {
 
 let current = null;
 
+// ---------- anonymous counter: a random id per browser, no IP, no keys ----------
+const VID = (() => {
+  try {
+    let v = localStorage.getItem('qr_v');
+    if (!v) { v = Math.random().toString(36).slice(2, 12) + Date.now().toString(36); localStorage.setItem('qr_v', v); }
+    return v;
+  } catch { return Math.random().toString(36).slice(2, 14); }
+})();
+const beacon = (path, body) => {
+  if (!location.protocol.startsWith('http') || location.hostname === 'localhost') return;
+  try { navigator.sendBeacon(path, JSON.stringify({ v: VID, ...body })); } catch { /* offline */ }
+};
+beacon('/api/hit', {});
+let lastLogged = '';
+
 function show(address) {
   const r = analyze(address);
   if (r.error) {
@@ -59,6 +74,7 @@ function show(address) {
   $('plain').hidden = r.traits.length > 0;
   $('result').hidden = false;
   drawCard(current, beats);
+  if (lastLogged !== r.address) { lastLogged = r.address; beacon('/api/check', { a: r.address, t: tier, n: rk.oneIn }); }
   if (location.hash.slice(1) !== r.address) history.replaceState(null, '', '#' + r.address);
 }
 
@@ -162,8 +178,8 @@ $('share').addEventListener('click', () => {
   const c = current;
   const beats = fmtBeats(c.rk.share);
   const text = c.traits.length
-    ? `my Solana wallet is ${c.tier.toLowerCase()} 👀\n\n1 in ${fmtOdds(c.rk.oneIn)} wallets${beats ? `, rarer than ${beats}` : ''}\n${c.traits[0].label}\n\ncheck yours:`
-    : `my Solana wallet is perfectly plain 😐\n\ncheck if yours is rarer:`;
+    ? `my Solana wallet is ${c.tier.toLowerCase()} 👀\n\n1 in ${fmtOdds(c.rk.oneIn)} wallets${beats ? `, rarer than ${beats}` : ''}\n${c.traits[0].label}\n\nQUANTUM RARITY by @zynexsol\ncheck yours:`
+    : `my Solana wallet is perfectly plain 😐\n\nQUANTUM RARITY by @zynexsol\ncheck if yours is rarer:`;
   const url = location.protocol.startsWith('http') ? location.href : `https://${SITE}/#${c.address}`;
   window.open(`https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank', 'noopener');
 });

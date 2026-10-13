@@ -1,11 +1,20 @@
 {DOMAIN}, www.{DOMAIN} {
+	{TLS}
 	root * /var/www/quantum-rarity
 	encode zstd gzip
-	file_server
 
-	# only the site's own files: no directory listings, no hidden files
-	@hidden path /.*
-	respond @hidden 404
+	# visit counter and the owner's stats page (127.0.0.1 only, see stats/)
+	handle /api/* {
+		reverse_proxy 127.0.0.1:5191
+	}
+	handle /stats* {
+		reverse_proxy 127.0.0.1:5191
+	}
+	handle {
+		@hidden path /.*
+		respond @hidden 404
+		file_server
+	}
 
 	header {
 		Strict-Transport-Security "max-age=31536000; includeSubDomains"
