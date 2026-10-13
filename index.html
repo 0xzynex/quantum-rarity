@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Rarity · How rare is your Solana wallet?</title>
+<meta name="description" content="Paste any Solana address and get the exact odds of every pattern in it, a unique sigil and a card to share. Runs in your browser. No wallet connect.">
+<meta property="og:title" content="Quantum Rarity · How rare is your Solana wallet?">
+<meta property="og:description" content="Exact odds for every pattern in a Solana address, ranked against 2,000,000 random wallets.">
+<meta property="og:image" content="assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/logo.svg">
+<link rel="stylesheet" href="web/style.css">
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <img src="assets/logo.svg" alt="">
+    <div>
+      <h1>Quantum Rarity</h1>
+      <p>How rare is your Solana wallet? Exact odds, ranked against 2,000,000 random wallets.</p>
+    </div>
+    <div class="local">Address only. No wallet connect. Nothing leaves this page.</div>
+  </header>
+
+  <form class="ask" id="form" autocomplete="off">
+    <label for="addr">Paste a Solana address</label>
+    <div class="row">
+      <input id="addr" spellcheck="false" placeholder="e.g. ZYNexSFaVhb3az3pW9FxL8TCfjsohXwDbkyRd6rW4sJ" aria-describedby="err">
+      <button type="submit">Check rarity</button>
+    </div>
+    <div class="err" id="err" role="alert"></div>
+    <div class="examples">Try:
+      <button type="button" data-a="ZYNexSFaVhb3az3pW9FxL8TCfjsohXwDbkyRd6rW4sJ">ZYNex…</button>
+      <button type="button" data-a="5kk294m9K3o3pzEPQhAxWCo4uhWBTfb765432cdMVq2q">…765432…</button>
+      <button type="button" data-a="FMa4B7RLHy6UmzYiZz9oo4gJ6hD5xvw6MYvYykAzzzzz">…zzzzz</button>
+      <button type="button" data-a="GsfVMFrMq45BmwktzxoHrUProFitD144D5inWQ9wPrEd">…ProFit…</button>
+      <button type="button" data-a="So11111111111111111111111111111111111111112">Wrapped SOL</button>
+      <button type="button" data-a="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v">USDC</button>
+    </div>
+  </form>
+
+  <section class="result" id="result" hidden>
+    <div class="cardwrap">
+      <canvas id="card" width="1200" height="675" aria-label="Rarity card"></canvas>
+      <div class="actions">
+        <button id="share" type="button">Share on X</button>
+        <button id="download" type="button" class="ghost">Download card</button>
+        <button id="copy" type="button" class="ghost">Copy link</button>
+      </div>
+      <p class="tip">X can't attach a picture from a link: download the card and add it to your post.</p>
+    </div>
+
+    <div class="sheet">
+      <p class="verdict" id="verdict"></p>
+      <p class="addr" id="addrOut"></p>
+      <h2>What makes it rare</h2>
+      <table class="traits" id="traits"></table>
+      <p class="none" id="plain" hidden>No rare patterns. Like <b>89%</b> of Solana addresses, this one is plain random letters. It still has its own sigil.</p>
+      <p class="more">Want a rarer one? <a href="https://github.com/0xzynex/quantum-vanity">Quantum Vanity</a> makes a wallet that starts with any word, on your own computer.</p>
+    </div>
+  </section>
+
+  <section class="how">
+    <h2>How the odds are computed</h2>
+    <div class="cols">
+      <div>
+        <h3>The first letter isn't random</h3>
+        <p>An address is a 256-bit number written in base58. Because 2<sup>256</sup> falls between 58<sup>43</sup> and 58<sup>44</sup>, about 94% of addresses start with <code>2</code> to <code>H</code> and only 1 in 999 starts with any given letter from <code>K</code> to <code>z</code>. We use the exact table, computed with integer math.</p>
+      </div>
+      <div>
+        <h3>Patterns, counted exactly</h3>
+        <p>Runs like <code>77777</code>, digit stretches and counting runs like <code>12345</code> are scored with exact dynamic programming, so "5 of the same in a row somewhere" gets its true odds, not a guess. Words are matched in any case against a list of 230 words people recognize.</p>
+      </div>
+      <div>
+        <h3>Ranked against real randomness</h3>
+        <p>Each wallet is scored by its rarest pattern. We scored 2,000,000 random public keys the same way, so "rarer than 99.9%" is measured, not claimed. Beyond what the sample can show, the rank follows the exact odds.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer><span>Quantum Rarity. Open source, zero dependencies, runs in your browser.</span><a href="https://x.com/0xzynex">@0xzynex</a></footer>
+</div>
+<script type="module" src="web/app.js"></script>
+</body>
+</html>

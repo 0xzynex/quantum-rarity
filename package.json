@@ -1,0 +1,14 @@
+{
+  "name": "quantum-rarity",
+  "version": "1.0.0",
+  "description": "How rare is your Solana wallet? Exact odds for every pattern in an address, a unique sigil and a share card. Runs entirely in your browser.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/rarity.test.js",
+    "calibrate": "node scripts/calibrate.mjs 2000000"
+  },
+  "author": "@0xzynex",
+  "license": "MIT",
+  "engines": { "node": ">=20" }
+}

@@ -1,0 +1,20 @@
+{DOMAIN}, www.{DOMAIN} {
+	root * /var/www/quantum-rarity
+	encode zstd gzip
+	file_server
+
+	# only the site's own files: no directory listings, no hidden files
+	@hidden path /.*
+	respond @hidden 404
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		X-Frame-Options "DENY"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"
+	}
+	@static path /assets/* /web/* /src/*
+	header @static Cache-Control "public, max-age=3600"
+}
